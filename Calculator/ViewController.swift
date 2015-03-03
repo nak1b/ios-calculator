@@ -29,7 +29,7 @@ class ViewController: UIViewController {
             userIsTyping = true
         }
        
-        print(digit);
+        //print(digit);
     }
     
     //stack to hold user inputed values
@@ -39,7 +39,34 @@ class ViewController: UIViewController {
     @IBAction func enter() {
         userIsTyping = false
         operandStack.append(displayValue)
-        print(operandStack);
+        print("Operand Stack:  + \(operandStack) \n");
+    }
+    
+    //Determining the operator and doing appropriate operation
+    @IBAction func operate(sender: UIButton) {
+        let operation = sender.currentTitle!
+        
+        //if user is typing and press operator instead of enter key add it to the stack
+        if(userIsTyping){
+            enter();
+        }
+        
+        //performing operation based on users input
+        switch operation{
+            case "×": performOperation{$0 * $1}
+            case "÷": performOperation{$1 / $0}
+            case "+": performOperation{$0 + $1}
+            case "−": performOperation{$1 - $0}
+            default: break
+        }
+    }
+    
+    //performing operation based on function provided
+    func performOperation(operation:(Double, Double)->Double){
+        if(operandStack.count>=2){
+            displayValue = operation(operandStack.removeLast(), operandStack.removeLast())
+            enter()
+        }
     }
     
     var displayValue:Double{
