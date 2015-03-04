@@ -57,14 +57,25 @@ class ViewController: UIViewController {
             case "÷": performOperation{$1 / $0}
             case "+": performOperation{$0 + $1}
             case "−": performOperation{$1 - $0}
+            case "sin": performOperation{ sin($0) }
+            case "cos": performOperation{ cos($0) }
+            case "√": performOperation{ sqrt($0) }
             default: break
         }
     }
     
-    //performing operation based on function provided
+    //performing operation based on function provided (TAKES 2 ARG)
     func performOperation(operation:(Double, Double)->Double){
         if(operandStack.count>=2){
             displayValue = operation(operandStack.removeLast(), operandStack.removeLast())
+            enter()
+        }
+    }
+    
+     //performing operation based on function provided (TAKES 1 ARG)
+    func performOperation(operation:(Double)->Double){
+        if(operandStack.count>=1){
+            displayValue = operation(operandStack.removeLast())
             enter()
         }
     }
