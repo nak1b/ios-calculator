@@ -13,7 +13,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var display: UILabel!
     
     //keeping track if user is in middle of typing
-    var userIsTyping = false;
+    var userIsTyping = false
+    
+    //keeping track that only one dot is entered
+    var decimalEntered = false
     
     //append number to display screen
     @IBAction func appendNumber(sender: UIButton) {
@@ -22,7 +25,14 @@ class ViewController: UIViewController {
         
         //if user is in middle of typing append digit or set display value to one entered
         if(userIsTyping){
-            display.text = display.text! + digit
+            if(digit != "."){
+                display.text = display.text! + digit
+            }else{
+                if(!decimalEntered){
+                    display.text = display.text! + digit
+                    decimalEntered = true;
+                }
+            }
         }
         else{
             display.text = digit
@@ -38,7 +48,13 @@ class ViewController: UIViewController {
     //Adding value to stack on pressing return
     @IBAction func enter() {
         userIsTyping = false
-        operandStack.append(displayValue)
+        decimalEntered = false
+        
+        //appending only if displayed value is valid number
+        if(display.text! != "."){
+            operandStack.append(displayValue)
+        }
+        
         print("Operand Stack:  + \(operandStack) \n");
     }
     
@@ -61,9 +77,10 @@ class ViewController: UIViewController {
             case "cos": performOperation{ cos($0) }
             case "√": performOperation{ sqrt($0) }
             case "C":
-                operandStack = []
-                userIsTyping = false
-                display.text! = "0"
+                operandStack = []        //empty array
+                userIsTyping = false     //default value
+                display.text! = "0"      //display to default
+                decimalEntered = false   //default value
             default: break
         }
     }
